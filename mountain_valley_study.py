@@ -152,6 +152,8 @@ def wave_func2(list1,fudu):
                 pivot, last_pivot_id = data, i
                 # Change the trend indicator
                 up_down = 1
+    index.append(i)
+    out.append(list1[-1])
     return index,out
 
 df = ts.get_hist_data('002359',start='2018-10-01',end='2018-12-05')
