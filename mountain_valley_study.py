@@ -64,7 +64,96 @@ def fractal_down(list1):
             out['index'].append(i+2)
             out['value'].append(list1[i+2])       
     return out        
-         
+def wave_func(list1,fudu):
+    # fudu is percent of rise or falls like 1%, 5%
+    #rules: a. first or last b. it's a node c. rise/fall amplitude higher than given fudu
+    
+    index=[]
+    value=[]
+    temp=[]
+    tempindex=[]
+    for i in xrange(len(list1)):
+        if i==0 or i==len(list1)-1:
+            temp.append(list1[i])
+            tempindex.append(i)
+        elif (list1[i]==max((list1[i-1:i+2])) or -list1[i]== max(-(list1[i-1:i+2]))  ):
+            temp.append(list1[i])
+            tempindex.append(i)
+    
+    for i in xrange(len(temp)):
+        if i==0 or i==len(temp)-1:
+            index.append(tempindex[i])
+            value.append(temp[i])
+        elif abs(temp[i+1]- temp[i] )/temp[i]*100>fudu and  \
+            (temp[i]==max((temp[i-1:i+2])) or temp[i]== min((temp[i-1:i+2]))  ):
+            index.append(tempindex[i])
+            value.append(temp[i])
+    for i in xrange(len(value)):
+        if i==0 or i==len(value)-1:
+            pass
+        elif (value[i]!=max((value[i-1:i+2])) or value[i]!= min((value[i-1:i+2]))  ):
+            value.pop()
+    return value,index
+
+def wave_func2(list1,fudu):
+    # fudu is percent of rise or falls like 1%, 5%
+    #rules: a. first or last b. it's a node c. rise/fall amplitude higher than given fudu
+    
+    index=[]
+    out=[]
+   
+    pivot = list1[0]
+    index.append(0)
+    out.append(pivot)
+    last_pivot_id = 0
+    up_down = 0
+  
+    for i in range(1,len(list1)):
+        data = list1[i]
+        # We don't have a trend yet
+        if up_down == 0:
+            if data < pivot*(1-fudu/100.0):
+                out.append(pivot)
+                index.append(last_pivot_id)
+                
+                pivot, last_pivot_id = data, i
+                
+                up_down = -1
+            elif data > pivot *(1+fudu/100.0):
+                out.append(pivot)
+                index.append(last_pivot_id)
+                pivot, last_pivot_id = data, i
+                
+                up_down = 1
+
+        # Current trend is up
+        elif up_down == 1:
+            # If got higher than last pivot, update the swing
+            if data > pivot :
+                # Remove the last pivot, as it wasn't a real one
+               
+                pivot, last_pivot_id = data, i
+            elif data < pivot  *(1-fudu/100.0):
+                out.append(pivot)
+                index.append(last_pivot_id)
+                pivot, last_pivot_id = data, i
+                up_down = -1
+
+        # Current trend is down
+        elif up_down == -1:
+             # If got lower than last pivot, update the swing
+            if data < pivot:
+                # Remove the last pivot, as it wasn't a real one
+              
+                pivot, last_pivot_id = data, i
+            elif data > pivot*(1+fudu/100.0):
+                out.append(pivot)
+                index.append(last_pivot_id)
+                pivot, last_pivot_id = data, i
+                # Change the trend indicator
+                up_down = 1
+    return index,out
+
 df = ts.get_hist_data('002359',start='2018-10-01',end='2018-12-05')
 df = df.sort_index()
 high = df[['high']].values
@@ -80,3 +169,5 @@ peak1,index1 = peak_high(high)
 plt.scatter(length[index1],peak1,c='b',marker='o',alpha=1)
 plt.show()
 
+value,index = wave_func(close,1)
+plt.scatter(length[index],value,c='c',marker='o',alpha=1)
