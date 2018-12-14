@@ -105,6 +105,7 @@ def wave_func2(list1,fudu):
     pivot = list1[0]
     index.append(0)
     out.append(pivot)
+    
     last_pivot_id = 0
     up_down = 0
   
@@ -113,15 +114,12 @@ def wave_func2(list1,fudu):
         # We don't have a trend yet
         if up_down == 0:
             if data < pivot*(1-fudu/100.0):
-                out.append(pivot)
-                index.append(last_pivot_id)
                 
                 pivot, last_pivot_id = data, i
                 
                 up_down = -1
             elif data > pivot *(1+fudu/100.0):
-                out.append(pivot)
-                index.append(last_pivot_id)
+                
                 pivot, last_pivot_id = data, i
                 
                 up_down = 1
@@ -152,9 +150,29 @@ def wave_func2(list1,fudu):
                 pivot, last_pivot_id = data, i
                 # Change the trend indicator
                 up_down = 1
-    index.append(i)
+    index.append(len(list1)-1)
     out.append(list1[-1])
-    return index,out
+    #not fixed: if last trend is not ended, pivot will not be recorded, and no 
+    return out,index
+
+def triangle_valume(volume,index):
+    out=[]
+    for  j in range(0,len(index)-1):
+        temp=0
+        for i in range(index[j],index[j+1]+1):
+            print i
+            if i==0:
+                out.append(volume[i])
+                print 'hehe'
+            elif i== index[j]:
+                pass
+            else:
+                temp=temp+volume[i]
+                out.append(temp)
+    return out        
+    
+
+
 
 df = ts.get_hist_data('002359',start='2018-10-01',end='2018-12-05')
 df = df.sort_index()
@@ -162,7 +180,7 @@ high = df[['high']].values
 openn = df[['open']].values
 low = df[['low']].values
 close = df[['close']].values
-
+volume = df[['volume']].values
 #length = range(0,len(high))
 length = np.arange(0,len(high))
 plt.scatter(length,high,c='r',marker='*',alpha=1)
@@ -171,5 +189,15 @@ peak1,index1 = peak_high(high)
 plt.scatter(length[index1],peak1,c='b',marker='o',alpha=1)
 plt.show()
 
-value,index = wave_func(close,1)
+value,index = wave_func2(close,3)
 plt.scatter(length[index],value,c='c',marker='o',alpha=1)
+
+x=triangle_valume(volume,index)
+
+ax1 = plt.subplot(211)
+ax1.plot(close,c='k',marker='o')
+ax1.plot(length[index],value,c='b',marker='o',alpha=1)
+ax2 = plt.subplot(212)
+ax2.stem(x)
+plt.show()
+
