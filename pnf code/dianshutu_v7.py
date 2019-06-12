@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 """
 Created on Thu Apr  4 16:02:40 2019
@@ -9,7 +8,7 @@ v4 bug is closes[i-1] may be ignored, should replace close[i] with close[i-1]
 import numpy as np
 import matplotlib.pyplot as plt
 def plot_dianshutu(close,low,ruler):
-    
+     
     out,mks = dianshutu(close,low,ruler)
     x,y,z = produce_xyaxis(out,mks)
     plt.figure()   
@@ -38,7 +37,7 @@ def dianshutu(high,low,rulers):
     ref = first_value
     for i in range(1,length_c):
         print "now is", i,"bull or bear", bull_former, ref
-        
+         
 #        if closess[i]<=closess[i-1] and loww[i]>=loww[i-1]:
 ##            ref_h=closess[i-1]
 ##            ref_l=loww[i-1]
@@ -65,7 +64,7 @@ def dianshutu(high,low,rulers):
                 ref = loww[i]
             else:
                 pass
-                
+                 
         elif  bull_former==False:
             if loww[i]<ref :#and bull_former==True:
                 bull_current = False
@@ -129,11 +128,11 @@ def dianshutu(high,low,rulers):
     out.append(temp)
     mks.append(marker)
     return out,mks
-                
+                 
 def produce_xyaxis(inn,mks):
     out = []
     index = 0
-    
+     
     for i in inn:
         temp = []
         for j in i:
@@ -150,12 +149,12 @@ def produce_xyaxis(inn,mks):
     for ___ in mks:
         z += ___
     return x,y,z
-    
-    
-    
-    
-    
-    
+     
+     
+     
+     
+     
+     
 #    length_r = len(rulers)
 #    temp=[]
 #    qishidian,ii = rulerlocation(closes[0],rulers)
@@ -163,8 +162,8 @@ def produce_xyaxis(inn,mks):
 #    for i in range(1,length_c):
 #        if closes[i]>=closes[i-1]:
 #            pass
-           
-           
+            
+            
 def highrulerlocation(x,rulers):
     #this function input is close, and ruler list, return is close in the middle of rulers
     length=len(rulers)
@@ -188,20 +187,20 @@ def high_low_converse(former,later,rulers):
         for k in range(0,int((later-former)/step)):
                 out.append(former+step*(k+1))
     return out
-                
+                 
 def high_to_rulers(highs,rulers):
     out=[]
     for i in highs:
         out.append(highrulerlocation(i,rulers))  
     # if step offset larger than 0.5, fill them full
-    
+     
     return out
 def low_to_rulers(lows,rulers):
     out=[]
     for i in lows:
         out.append(lowrulerlocation(i,rulers))  
     # if step offset larger than 0.5, fill them full
-    
+     
     return out
 def rulerindex(rulers):
     # this function return the 1/2 limits value list
@@ -210,7 +209,7 @@ def rulerindex(rulers):
     for i in range(1,length):
         out.append(rulers[i]/2.0+rulers[i-1]/2.0)
     return out
-
+ 
 def arange(start,stop,step):
     out=[]
     out.append(start)
@@ -222,7 +221,3 @@ def arange(start,stop,step):
         else:
             break
     return out
-
-
-
-        

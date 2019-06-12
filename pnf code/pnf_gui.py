@@ -40,7 +40,7 @@ import Tkinter as tk
 from tkinter.filedialog import askopenfilename
 import tkinter.messagebox
 import time
-
+from function_plot_pnf import *
 class App():
     def __init__(self):
         self.root = tk.Tk()
@@ -98,7 +98,18 @@ class App():
             tkinter.messagebox.showinfo('提示','并未选择任何数据文件,请点击重新选择')
     def show(self):
         self.code = self.e1.get()
+        
         self.step = self.e2.get()
+        if self.step=='':
+            step = None
+        else: 
+            try :
+                if type(int(self.step))==int :
+                    step = int(self.step)
+            except:
+                tkinter.messagebox.showinfo('提示','请输入整数间距或不输入')
+            
+        
         print(r"code %s" % self.code)
         print(r"step %s" % self.step)
         print(self.path)
@@ -106,7 +117,7 @@ class App():
             tkinter.messagebox.showinfo('提示','未输入代码或选择数据文件,请回到步骤一')
             return
         if self.code!='':
-            pass
+            print_pnf(self.code,step)
         elif self.path!='':
             pass
             
