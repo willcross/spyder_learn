@@ -38,6 +38,7 @@ while num<7:
 '''
 import Tkinter as tk
 from tkinter.filedialog import askopenfilename
+import tkinter.messagebox
 import time
 
 class App():
@@ -93,14 +94,24 @@ class App():
         except:
             self.path = askopenfilename()
         print(self.path)
+        if self.path=='':
+            tkinter.messagebox.showinfo('提示','并未选择任何数据文件,请点击重新选择')
     def show(self):
         self.code = self.e1.get()
         self.step = self.e2.get()
         print(r"code %s" % self.code)
         print(r"step %s" % self.step)
         print(self.path)
-        self.e1.delete(0, "end")
-        self.e2.delete(0, "end")
+        if self.code=='' and self.path=='':
+            tkinter.messagebox.showinfo('提示','未输入代码或选择数据文件,请回到步骤一')
+            return
+        if self.code!='':
+            pass
+        elif self.path!='':
+            pass
+            
+#        self.e1.delete(0, "end")
+#        self.e2.delete(0, "end")
 
 
 if __name__=="__main__":
